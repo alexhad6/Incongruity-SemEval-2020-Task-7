@@ -1,6 +1,9 @@
 # Incongruity-SemEval-2020-Task-7
 Final project for Natural Language Processing (CS 159) at Harvey Mudd College in Spring 2021. We analyzed incongruity in humor based on SemEval 2020 Task 7 and the Humicroedit database.
 
+## Download GloVe
+http://www.google.com/url?q=http%3A%2F%2Fnlp.stanford.edu%2Fdata%2Fglove.6B.zip&sa=D&sntz=1&usg=AFQjCNHO7rFo6rSvaNjTS8XbuLpK5isqrw
+
 ## NLP Lab 4
 [https://sites.google.com/g.hmc.edu/cs159spring2021/labs/lab-4-glove-vectors](https://sites.google.com/g.hmc.edu/cs159spring2021/labs/lab-4-glove-vectors)
 
