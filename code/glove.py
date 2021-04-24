@@ -25,7 +25,11 @@ def load_glove_vectors(fp):
     return array, words
 
 def get_vec(word, word_list, vectors):
-    return vectors[word_list.index(word)]
+    try:
+        return vectors[word_list.index(word)]
+    except ValueError:
+        # print(f'No GloVe vector for {word}')
+        return None
 
 def main(args):
     array, words = load_text_vectors(args.GloVeFILE)
