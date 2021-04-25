@@ -21,7 +21,7 @@ def combined_data(dataframes, metric):
     metric_values = []
     meanGrades = []
     for dataframe in dataframes:
-        for i, row in dataframe.iterrows():
+        for _, row in dataframe.iterrows():
             if not pd.isna(row[metric]):
                 metric_values.append(row[metric])
                 meanGrades.append(row.meanGrade)
@@ -70,4 +70,9 @@ if __name__ == '__main__':
         help='name of file to write plot to')
     main(parser.parse_args())
 
-# python experiment.py ../glove/glove.6B.50d.npy plot-all.png
+# python experiment.py ../glove/glove.6B.300d.npy plot-all.png
+
+
+# original_vs_edit w/ 300D GloVe
+# Pearson correlation: (-0.17739550138691068, 1.0680352459856034e-143)
+# Spearman correlation: SpearmanrResult(correlation=-0.16169603479087277, pvalue=2.093149320427472e-119)

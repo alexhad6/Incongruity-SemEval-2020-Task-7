@@ -44,3 +44,5 @@ if __name__ == '__main__':
         type=argparse.FileType('wb'),
         help='an .npy file to write the saved numpy data to')
     main(parser.parse_args())
+
+# python glove.py ../glove/glove.840B.300d.txt ../glove/glove.840B.300d.npy
