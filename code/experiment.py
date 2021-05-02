@@ -33,16 +33,11 @@ def statistics(metric_values, mean_grades):
     n = len(mean_grades)
     slope, intercept, r_value, p_value, std_err = linregress(metric_values, mean_grades)
     avg_grade = sum(mean_grades)/n
-    RMSE = math.sqrt(sum((p(metric_values[i]) - mean_grades[i])**2 for i in range(n))/n)
-    RMSE_avg = math.sqrt(sum((avg_grade - mean_grades[i])**2 for i in range(n))/n)
     print(f'Linear regression equation: {p}')
     print(f'Pearson correlation: {pearsonr(metric_values, mean_grades)}')
     print(f'Spearman correlation: {spearmanr(metric_values, mean_grades)}')
     print(f'n: {n}')
     print(f'slope: {slope}, intercept: {intercept}, r_value: {r_value}, p_value: {p_value}, std_err: {std_err}')
-    # print(f'RMSE: {RMSE}')
-    # print(f'RMSE Average: {RMSE_avg}')
-    print()
 
 def export_to_csv(metric_values, mean_grades, metric_name):
     export = pd.DataFrame()
@@ -71,6 +66,7 @@ def run_metric(train, test, metric, metric_name, axis_name):
     RMSE_avg = math.sqrt(sum((average_grade - test_mean_grades[i])**2 for i in range(n))/n)
     print(f'RMSE: {RMSE}')
     print(f'RMSE average: {RMSE_avg}')
+    print()
 
 def main(args):
     # Load train and test data
@@ -89,20 +85,20 @@ def main(args):
     run_metric(train, test, metric1, 'original_vs_edit', 'Original vs. Edit Cosine Similarity')
     print()
 
-    # # Run edit vs. neighbors (metric 2) with window 1
-    # metric2_window1 = lambda row: incongruity.edit_vs_neighbors(row.original, row.edit, glove_words, glove_vectors, window_size=1)
-    # run_metric(train, test, metric2_window1, 'edit_vs_neighbors_window1', 'Edit vs. Neighbors Cosine Similarity (window=1)')
-    # print()
+    # Run edit vs. neighbors (metric 2) with window 1
+    metric2_window1 = lambda row: incongruity.edit_vs_neighbors(row.original, row.edit, glove_words, glove_vectors, window_size=1)
+    run_metric(train, test, metric2_window1, 'edit_vs_neighbors_window1', 'Edit vs. Neighbors Cosine Similarity (window=1)')
+    print()
 
-    # # Run edit vs. neighbors (metric 2) with window 3
-    # metric2_window3 = lambda row: incongruity.edit_vs_neighbors(row.original, row.edit, glove_words, glove_vectors, window_size=3)
-    # run_metric(train, test, metric2_window3, 'edit_vs_neighbors_window3', 'Edit vs. Neighbors Cosine Similarity (window=3)')
-    # print()
+    # Run edit vs. neighbors (metric 2) with window 3
+    metric2_window3 = lambda row: incongruity.edit_vs_neighbors(row.original, row.edit, glove_words, glove_vectors, window_size=3)
+    run_metric(train, test, metric2_window3, 'edit_vs_neighbors_window3', 'Edit vs. Neighbors Cosine Similarity (window=3)')
+    print()
 
-    # # Calculate edit vs. neighbors (metric 2) with no window
-    # metric2 = lambda row: incongruity.edit_vs_neighbors(row.original, row.edit, glove_words, glove_vectors)
-    # run_metric(train, test, metric2, 'edit_vs_neighbors', 'Edit vs. Neighbors Cosine Similarity (no window)')
-    # print()
+    # Calculate edit vs. neighbors (metric 2) with no window
+    metric2 = lambda row: incongruity.edit_vs_neighbors(row.original, row.edit, glove_words, glove_vectors)
+    run_metric(train, test, metric2, 'edit_vs_neighbors', 'Edit vs. Neighbors Cosine Similarity (no window)')
+    print()
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
