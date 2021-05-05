@@ -292,7 +292,7 @@ class PretrainedTransformer(nn.Module):
         inp_mask = (inp != self.pad_token_id) & (inp != self.sep_token_id)
         sep_mask = inp == self.sep_token_id
 
-        outputs = self.transformer(inp, attention_mask=inp_mask)
+        outputs = self.transformer(inp, attention_mask=inp_mask, return_dict = False)  # ADDED: return_dict = False
         last_hidden_state, pooler_output, hidden_states = outputs
 
         if self.scalar_mix is not None:

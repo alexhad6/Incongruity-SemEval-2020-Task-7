@@ -28,7 +28,7 @@ from transformers import get_linear_schedule_with_warmup
 from transformers import AdamW as huggingface_AdamW
 from transformers import *
 
-from torchtext import data
+from torchtext.legacy import data  # CHANGED: torchtext => torchtext.legacy
 from torchtext.vocab import Vectors, GloVe
 
 from allennlp.modules.scalar_mix import ScalarMix
