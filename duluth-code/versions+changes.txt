@@ -1,0 +1,13 @@
+Python          3.7.10
+torch           1.8.1
+torchtext       0.9.1
+numpy           1.20.1
+pandas          1.2.4
+transformers    4.5.1
+allennlp        2.4.0
+spacy           2.3.5
+nltk            3.5
+tensorboardX    2.2
+
+src/util.py line 31:       from torchtext.legacy import data
+src/models.py line 295:    outputs = self.transformer(inp, attention_mask=inp_mask, return_dict = False)
