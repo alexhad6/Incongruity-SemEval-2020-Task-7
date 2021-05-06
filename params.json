@@ -1,0 +1,17 @@
+{
+  "bsz": 32,
+  "seed": 1,
+  "epochs": 10,
+  "grad_norm": 5,
+  "model": "transformer",
+  "transformer": "roberta-base",
+  "finetune": 1,
+  "feature": "edit",
+  "task": "task1",
+  "train_extra": 0,
+  "optimizer": "adam",
+  "lr": 2e-05,
+  "adam_epsilon": 1e-08,
+  "schedule": "linear_schedule_with_warmup",
+  "warmup_steps": 0
+}
