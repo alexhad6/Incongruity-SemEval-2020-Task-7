@@ -18,21 +18,20 @@ def extract_original_phrase(headline):
     end = headline.index('>')
     return headline[start+1:end-1]
 
-def plot_metric(metric_values, meanGrades, xlabel, plotname):
+def plot_metric(metric_values, meanGrades, xlabel, ylabel, plotname):
     fig = plt.figure(figsize=(8, 4.5))
     ax = fig.add_subplot(1, 1, 1)
     ax.scatter(metric_values, meanGrades, c='b', s=12, alpha=0.1)
     p = np.poly1d(np.polyfit(metric_values, meanGrades, 1))
     plt.plot(metric_values, p(metric_values), 'r', linewidth=2)
     plt.xlabel(xlabel)
-    plt.ylabel('Mean Humor Grade')
+    plt.ylabel(ylabel)
     plt.savefig(plotname)
 
 def statistics(metric_values, mean_grades):
     p = np.poly1d(np.polyfit(metric_values, mean_grades, 1))
     n = len(mean_grades)
     slope, intercept, r_value, p_value, std_err = linregress(metric_values, mean_grades)
-    avg_grade = sum(mean_grades)/n
     print(f'Linear regression equation: {p}')
     print(f'Pearson correlation: {pearsonr(metric_values, mean_grades)}')
     print(f'Spearman correlation: {spearmanr(metric_values, mean_grades)}')
@@ -46,26 +45,51 @@ def export_to_csv(metric_values, mean_grades, metric_name):
     export.to_csv(metric_name+'.csv')
 
 def run_metric(train, test, metric, metric_name, axis_name):
+    # Apply metric to training data
     train[metric_name] = train.apply(metric, axis=1)
     train_notnull = train[train[metric_name].notnull()]
     metric_values = train_notnull[metric_name].values.tolist()
+
+    # Plot metric vs. mean humor grades
+    print(f'{metric_name} vs. mean grades')
     mean_grades = train_notnull['meanGrade'].values.tolist()
-    plot_metric(metric_values, mean_grades, axis_name, f'{metric_name}.png')
-    print(metric_name)
+    plot_metric(metric_values, mean_grades, axis_name, 'Mean Humor Grade', f'{metric_name}-mean_grade.png')
     statistics(metric_values, mean_grades)
+    print()
 
+    # Calculate metric on the test data
     model = np.poly1d(np.polyfit(metric_values, mean_grades, 1))
-    average_grade = sum(mean_grades)/len(mean_grades)
-
     test[metric_name] = test.apply(metric, axis=1)
     test_notnull = test[test[metric_name].notnull()]
     test_metric_values = test_notnull[metric_name].values.tolist()
     test_mean_grades = test_notnull['meanGrade'].values.tolist()
+    duluth_orginal_vs_edit_pred = test_notnull['duluth_orginal_vs_edit'].values.tolist()
+    duluth_edit_only_pred = test_notnull['duluth_edit_only'].values.tolist()
+
+    # Use model to predict humor grades in test data
+    print(f'{metric_name} predictions')
+    average_grade = sum(mean_grades)/len(mean_grades)
     n = len(test_mean_grades)
     RMSE = math.sqrt(sum((model(test_metric_values[i]) - test_mean_grades[i])**2 for i in range(n))/n)
     RMSE_avg = math.sqrt(sum((average_grade - test_mean_grades[i])**2 for i in range(n))/n)
+    RMSE_Duluth_original_vs_edit = math.sqrt(sum((duluth_orginal_vs_edit_pred[i] - test_mean_grades[i])**2 for i in range(n))/n)
+    RMSE_Duluth_edit_only = math.sqrt(sum((duluth_edit_only_pred[i] - test_mean_grades[i])**2 for i in range(n))/n)
     print(f'RMSE: {RMSE}')
     print(f'RMSE average: {RMSE_avg}')
+    print(f'RMSE Duluth original vs. edit: {RMSE_Duluth_original_vs_edit}')
+    print(f'RMSE Duluth edit only: {RMSE_Duluth_edit_only}')
+    print()
+
+    # Plot metric vs. Duluth original_vs_edit predictions
+    print(f'{metric_name} vs. Duluth original-vs-edit')
+    plot_metric(test_metric_values, duluth_orginal_vs_edit_pred, axis_name, 'Duluth Original vs. Edit Model Predictions', f'{metric_name}-Duluth_original_vs_edit.png')
+    statistics(test_metric_values, duluth_orginal_vs_edit_pred)
+    print()
+
+    # Plot metric vs. Duluth original_vs_edit predictions
+    print(f'{metric_name} vs. Duluth edit-only')
+    plot_metric(test_metric_values, duluth_edit_only_pred, axis_name, 'Duluth Edit Only Model Predictions', f'{metric_name}-Duluth_edit_only.png')
+    statistics(test_metric_values, duluth_edit_only_pred)
     print()
 
 def main(args):
@@ -77,6 +101,15 @@ def main(args):
     train['original_phrase'] = train.original.apply(extract_original_phrase)
     test['original_phrase'] = test.original.apply(extract_original_phrase)
 
+    # Load in Duluth predictions to test DataFrame
+    duluth_original_vs_edit = pd.read_csv('../data/duluth-task-1/original-vs-edit.csv')
+    duluth_edit_only = pd.read_csv('../data/duluth-task-1/edit-only.csv')
+    test = test.sort_values(by=['id']).reset_index(drop=True)
+    duluth_original_vs_edit = duluth_original_vs_edit.sort_values(by=['id']).reset_index(drop=True)
+    duluth_edit_only = duluth_edit_only.sort_values(by=['id']).reset_index(drop=True)
+    test['duluth_orginal_vs_edit'] = duluth_original_vs_edit.pred
+    test['duluth_edit_only'] = duluth_edit_only.pred
+
     # Load GloVe vectors
     glove_vectors, glove_words = glove.load_glove_vectors(args.npyFILE)
 
@@ -85,20 +118,20 @@ def main(args):
     run_metric(train, test, metric1, 'original_vs_edit', 'Original vs. Edit Cosine Similarity')
     print()
 
-    # Run edit vs. neighbors (metric 2) with window 1
-    metric2_window1 = lambda row: incongruity.edit_vs_neighbors(row.original, row.edit, glove_words, glove_vectors, window_size=1)
-    run_metric(train, test, metric2_window1, 'edit_vs_neighbors_window1', 'Edit vs. Neighbors Cosine Similarity (window=1)')
-    print()
+    # # Run edit vs. neighbors (metric 2) with window 1
+    # metric2_window1 = lambda row: incongruity.edit_vs_neighbors(row.original, row.edit, glove_words, glove_vectors, window_size=1)
+    # run_metric(train, test, metric2_window1, 'edit_vs_neighbors_window1', 'Edit vs. Neighbors Cosine Similarity (window=1)')
+    # print()
 
-    # Run edit vs. neighbors (metric 2) with window 3
-    metric2_window3 = lambda row: incongruity.edit_vs_neighbors(row.original, row.edit, glove_words, glove_vectors, window_size=3)
-    run_metric(train, test, metric2_window3, 'edit_vs_neighbors_window3', 'Edit vs. Neighbors Cosine Similarity (window=3)')
-    print()
+    # # Run edit vs. neighbors (metric 2) with window 3
+    # metric2_window3 = lambda row: incongruity.edit_vs_neighbors(row.original, row.edit, glove_words, glove_vectors, window_size=3)
+    # run_metric(train, test, metric2_window3, 'edit_vs_neighbors_window3', 'Edit vs. Neighbors Cosine Similarity (window=3)')
+    # print()
 
-    # Calculate edit vs. neighbors (metric 2) with no window
-    metric2 = lambda row: incongruity.edit_vs_neighbors(row.original, row.edit, glove_words, glove_vectors)
-    run_metric(train, test, metric2, 'edit_vs_neighbors', 'Edit vs. Neighbors Cosine Similarity (no window)')
-    print()
+    # # Calculate edit vs. neighbors (metric 2) with no window
+    # metric2 = lambda row: incongruity.edit_vs_neighbors(row.original, row.edit, glove_words, glove_vectors)
+    # run_metric(train, test, metric2, 'edit_vs_neighbors', 'Edit vs. Neighbors Cosine Similarity (no window)')
+    # print()
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -112,7 +145,7 @@ if __name__ == '__main__':
     #     help='name of file to write plot to')
     main(parser.parse_args())
 
-# python experiment.py ../glove/glove.6B.50d.npy plot-all.png
+# python3 experiment.py ../glove/glove.6B.50d.npy
 
 # original_vs_edit w/ 300D GloVe
 # Pearson correlation: (-0.17739550138691068, 1.0680352459856034e-143)
@@ -172,3 +205,37 @@ if __name__ == '__main__':
 # slope: -0.8018024814984126, intercept: 1.1372279724022023, r_value: -0.14850156053117664, p_value: 2.4663018290518952e-86, std_err: 0.040487348709439736
 # RMSE: 0.5878118266449132
 # RMSE average: 0.5933295193064491
+
+
+
+# Comparison to Duluth
+
+# original_vs_edit vs. mean grades
+# Linear regression equation:  
+# -0.444 x + 1.169
+# Pearson correlation: (-0.1715648018191982, 6.488998669799704e-115)
+# Spearman correlation: SpearmanrResult(correlation=-0.16304199571293118, pvalue=8.038090987863553e-104)
+# n: 17379
+# slope: -0.44402903916586006, intercept: 1.1691089639268526, r_value: -0.17156480181919806, p_value: 6.488998669867637e-115, std_err: 0.019342304195490097
+
+# original_vs_edit predictions
+# RMSE: 0.587085338873625
+# RMSE average: 0.5931697355562816
+# RMSE Duluth original vs. edit: 0.5241778682680762
+# RMSE Duluth edit only: 0.5173870620596246
+
+# original_vs_edit vs. Duluth original-vs-edit
+# Linear regression equation:  
+# -0.2987 x + 0.9418
+# Pearson correlation: (-0.238256266598547, 5.8091440947543545e-40)
+# Spearman correlation: SpearmanrResult(correlation=-0.2586205493767007, pvalue=5.154003044456129e-47)
+# n: 2998
+# slope: -0.2987114915405157, intercept: 0.9418293236345023, r_value: -0.23825626659854696, p_value: 5.8091440947314156e-40, std_err: 0.022245716895041092
+
+# original_vs_edit vs. Duluth edit-only
+# Linear regression equation:  
+# -0.3854 x + 1.031
+# Pearson correlation: (-0.2899551842567706, 3.6863100601618273e-59)
+# Spearman correlation: SpearmanrResult(correlation=-0.29641005194173736, pvalue=7.297074329000809e-62)
+# n: 2998
+# slope: -0.3854435196211351, intercept: 1.0306234797089742, r_value: -0.2899551842567705, p_value: 3.6863100601467585e-59, std_err: 0.023242838109712075
