@@ -47,7 +47,7 @@ def run_metric(train, test, metric, metric_name, axis_name):
     # Plot metric vs. mean humor grades
     print(f'{metric_name} vs. mean grades')
     mean_grades = train_notnull['meanGrade'].values.tolist()
-    plot_metric(metric_values, mean_grades, axis_name, 'Mean Humor Grade', f'images/{metric_name}-mean_grade.png')
+    plot_metric(metric_values, mean_grades, 'Metric 1 Predictions', 'Mean Humor Grade', f'images/{metric_name}-mean_grade.png')
     statistics(metric_values, mean_grades)
     print()
 
@@ -59,6 +59,10 @@ def run_metric(train, test, metric, metric_name, axis_name):
     test_mean_grades = test_notnull['meanGrade'].values.tolist()
     duluth_orginal_vs_edit_pred = test_notnull['duluth_orginal_vs_edit'].values.tolist()
     duluth_edit_only_pred = test_notnull['duluth_edit_only'].values.tolist()
+
+
+    # # Plot model predictions vs. test humor grades
+    # plot_metric(test_metric_values, test_mean_grades, axis_name, 'Mean Humor Grade', f'images/{metric_name}-mean_grade_test.png')
 
     # Use model to predict humor grades in test data
     print(f'{metric_name} predictions')
@@ -112,32 +116,32 @@ def main(args):
     run_metric(train, test, metric1, 'original_vs_edit', 'Metric 1 [Original vs. Edit]')
     print()
 
-    # Run edit vs. neighbors (metric 2) with window 1
-    metric2_window1 = lambda row: incongruity.edit_vs_neighbors(row.original, row.edit, glove_words, glove_vectors, window_size=1)
-    run_metric(train, test, metric2_window1, 'edit_vs_neighbors_window1', 'Metric 2 [Edit vs. Neighbors] (window=1)')
-    print()
+    # # Run edit vs. neighbors (metric 2) with window 1
+    # metric2_window1 = lambda row: incongruity.edit_vs_neighbors(row.original, row.edit, glove_words, glove_vectors, window_size=1)
+    # run_metric(train, test, metric2_window1, 'edit_vs_neighbors_window1', 'Metric 2 [Edit vs. Neighbors] (window=1)')
+    # print()
 
-    # Run edit vs. neighbors (metric 2) with window 3
-    metric2_window3 = lambda row: incongruity.edit_vs_neighbors(row.original, row.edit, glove_words, glove_vectors, window_size=3)
-    run_metric(train, test, metric2_window3, 'edit_vs_neighbors_window3', 'Metric 2 [Edit vs. Neighbors] (window=3)')
-    print()
+    # # Run edit vs. neighbors (metric 2) with window 3
+    # metric2_window3 = lambda row: incongruity.edit_vs_neighbors(row.original, row.edit, glove_words, glove_vectors, window_size=3)
+    # run_metric(train, test, metric2_window3, 'edit_vs_neighbors_window3', 'Metric 2 [Edit vs. Neighbors] (window=3)')
+    # print()
 
-    # Calculate edit vs. neighbors (metric 2) with no window
-    metric2 = lambda row: incongruity.edit_vs_neighbors(row.original, row.edit, glove_words, glove_vectors)
-    run_metric(train, test, metric2, 'edit_vs_neighbors', 'Metric 2 [Edit vs. Neighbors] (unlimited window)')
-    print()
+    # # Calculate edit vs. neighbors (metric 2) with no window
+    # metric2 = lambda row: incongruity.edit_vs_neighbors(row.original, row.edit, glove_words, glove_vectors)
+    # run_metric(train, test, metric2, 'edit_vs_neighbors', 'Metric 2 [Edit vs. Neighbors] (unlimited window)')
+    # print()
 
-    # Calculate RMSEs
-    print('RMSEs using all data')
-    n = len(test.meanGrade)
-    average_grade = sum(test.meanGrade)/n
-    RMSE_avg = math.sqrt(sum((average_grade - test.meanGrade[i])**2 for i in range(n))/n)
-    RMSE_Duluth_original_vs_edit = math.sqrt(sum((duluth_original_vs_edit.pred[i] - test.meanGrade[i])**2 for i in range(n))/n)
-    RMSE_Duluth_edit_only = math.sqrt(sum((duluth_edit_only.pred[i] - test.meanGrade[i])**2 for i in range(n))/n)
-    print(f'RMSE average: {RMSE_avg}')
-    print(f'RMSE Duluth original vs. edit: {RMSE_Duluth_original_vs_edit}')
-    print(f'RMSE Duluth edit only: {RMSE_Duluth_edit_only}')
-    print()
+    # # Calculate RMSEs
+    # print('RMSEs using all data')
+    # n = len(test.meanGrade)
+    # average_grade = sum(test.meanGrade)/n
+    # RMSE_avg = math.sqrt(sum((average_grade - test.meanGrade[i])**2 for i in range(n))/n)
+    # RMSE_Duluth_original_vs_edit = math.sqrt(sum((duluth_original_vs_edit.pred[i] - test.meanGrade[i])**2 for i in range(n))/n)
+    # RMSE_Duluth_edit_only = math.sqrt(sum((duluth_edit_only.pred[i] - test.meanGrade[i])**2 for i in range(n))/n)
+    # print(f'RMSE average: {RMSE_avg}')
+    # print(f'RMSE Duluth original vs. edit: {RMSE_Duluth_original_vs_edit}')
+    # print(f'RMSE Duluth edit only: {RMSE_Duluth_edit_only}')
+    # print()
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
