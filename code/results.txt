@@ -1,0 +1,126 @@
+original_vs_edit vs. mean grades
+Linear regression equation:  
+-0.7467 x + 1.149
+Pearson correlation: (-0.18115837184710448, 4.072014702863987e-128)
+Spearman correlation: SpearmanrResult(correlation=-0.16347894968689716, pvalue=2.2433095660085374e-104)
+n: 17379
+slope: -0.7466566918314566, intercept: 1.1489431955957161, r_value: -0.1811583718471044, p_value: 4.072014702908481e-128, std_err: 0.030748871050325994
+
+original_vs_edit predictions
+RMSE: 0.586235231524363
+RMSE average: 0.5931697355562816
+RMSE Duluth original vs. edit: 0.5241778682680761
+RMSE Duluth edit only: 0.5173870620596246
+
+original_vs_edit vs. Duluth original-vs-edit
+Linear regression equation:  
+-0.4861 x + 0.9264
+Pearson correlation: (-0.24536098592443314, 2.3839166754517483e-42)
+Spearman correlation: SpearmanrResult(correlation=-0.2686403023309633, pvalue=1.004552030516054e-50)
+n: 2998
+slope: -0.48614850457608916, intercept: 0.926411374966624, r_value: -0.24536098592443326, p_value: 2.3839166754426855e-42, std_err: 0.03509213542619906
+
+original_vs_edit vs. Duluth edit-only
+Linear regression equation:  
+-0.6053 x + 1.009
+Pearson correlation: (-0.2881086621900144, 2.1235978395422972e-58)
+Spearman correlation: SpearmanrResult(correlation=-0.2942183220191214, pvalue=6.151450206408318e-61)
+n: 2998
+slope: -0.6052600843340707, intercept: 1.0088579540568965, r_value: -0.2881086621900144, p_value: 2.1235978395334527e-58, std_err: 0.036753433607618805
+
+
+edit_vs_neighbors_window1 vs. mean grades
+Linear regression equation:  
+-0.4588 x + 1.128
+Pearson correlation: (-0.11093829083263165, 1.4843859979422796e-48)
+Spearman correlation: SpearmanrResult(correlation=-0.1052615945145242, pvalue=7.3036907375955415e-44)
+n: 17318
+slope: -0.45878828218195994, intercept: 1.1280719576001372, r_value: -0.11093829083263163, p_value: 1.4843859979819738e-48, std_err: 0.031233307641369504
+
+edit_vs_neighbors_window1 predictions
+RMSE: 0.5899625260147918
+RMSE average: 0.5937898849608764
+RMSE Duluth original vs. edit: 0.5248238167782702
+RMSE Duluth edit only: 0.5180078890566446
+
+edit_vs_neighbors_window1 vs. Duluth original-vs-edit
+Linear regression equation:  
+-0.441 x + 0.9246
+Pearson correlation: (-0.2150265810800783, 1.2978526916405072e-32)
+Spearman correlation: SpearmanrResult(correlation=-0.22872221739238663, pvalue=8.692084284174116e-37)
+n: 2990
+slope: -0.44101754286556816, intercept: 0.9245948800532824, r_value: -0.21502658108007827, p_value: 1.2978526916470044e-32, std_err: 0.03664323298184993
+
+edit_vs_neighbors_window1 vs. Duluth edit-only
+Linear regression equation:  
+-0.5805 x + 1.01
+Pearson correlation: (-0.2668964123581087, 6.140943514009224e-50)
+Spearman correlation: SpearmanrResult(correlation=-0.26351984113152044, pvalue=1.1058399717872008e-48)
+n: 2990
+slope: -0.5805117161228708, intercept: 1.009509235267286, r_value: -0.2668964123581086, p_value: 6.140943514040029e-50, std_err: 0.03834698135169741
+
+
+edit_vs_neighbors_window3 vs. mean grades
+Linear regression equation:  
+-0.6395 x + 1.134
+Pearson correlation: (-0.1314407533149507, 6.9808207125084545e-68)
+Spearman correlation: SpearmanrResult(correlation=-0.1315526842123962, pvalue=5.375392992140799e-68)
+n: 17394
+slope: -0.6394837242422523, intercept: 1.134273121353309, r_value: -0.13144075331495064, p_value: 6.980820712273873e-68, std_err: 0.03657129385855844
+
+edit_vs_neighbors_window3 predictions
+RMSE: 0.5888148605096909
+RMSE average: 0.5933295193064483
+RMSE Duluth original vs. edit: 0.5244346598330082
+RMSE Duluth edit only: 0.5175254862316832
+
+edit_vs_neighbors_window3 vs. Duluth original-vs-edit
+Linear regression equation:  
+-0.6032 x + 0.93
+Pearson correlation: (-0.2486771957201451, 1.6690384987793144e-43)
+Spearman correlation: SpearmanrResult(correlation=-0.2680819762559078, pvalue=1.572842843936917e-50)
+n: 2999
+slope: -0.6032331086129993, intercept: 0.9300118139796894, r_value: -0.24867719572014513, p_value: 1.669038498776394e-43, std_err: 0.042918468154449815
+
+edit_vs_neighbors_window3 vs. Duluth edit-only
+Linear regression equation:  
+-0.7585 x + 1.014
+Pearson correlation: (-0.2949797055489224, 2.808254845604247e-61)
+Spearman correlation: SpearmanrResult(correlation=-0.29806191111742814, pvalue=1.3794733142503957e-62)
+n: 2999
+slope: -0.7585019972692856, intercept: 1.0137730400430136, r_value: -0.29497970554892244, p_value: 2.8082548455985428e-61, std_err: 0.04488006837958343
+
+
+edit_vs_neighbors vs. mean grades
+Linear regression equation:  
+-0.8018 x + 1.137
+Pearson correlation: (-0.14850156053117664, 2.4663018291391694e-86)
+Spearman correlation: SpearmanrResult(correlation=-0.14980314690348023, pvalue=7.736849463456234e-88)
+n: 17394
+slope: -0.801802481498413, intercept: 1.1372279724022023, r_value: -0.14850156053117672, p_value: 2.4663018290514737e-86, std_err: 0.04048734870943973
+
+edit_vs_neighbors predictions
+RMSE: 0.5878118266449129
+RMSE average: 0.5933295193064483
+RMSE Duluth original vs. edit: 0.5244346598330082
+RMSE Duluth edit only: 0.5175254862316832
+
+edit_vs_neighbors vs. Duluth original-vs-edit
+Linear regression equation:  
+-0.743 x + 0.9324
+Pearson correlation: (-0.27994753928268806, 4.003369629032177e-55)
+Spearman correlation: SpearmanrResult(correlation=-0.2973145258974634, pvalue=2.874347698051388e-62)
+n: 2999
+slope: -0.7430188497092203, intercept: 0.9324115904284451, r_value: -0.27994753928268806, p_value: 4.0033696290238375e-55, std_err: 0.04654338441800305
+
+edit_vs_neighbors vs. Duluth edit-only
+Linear regression equation:  
+-0.909 x + 1.015
+Pearson correlation: (-0.3230762559999014, 8.161497537028087e-74)
+Spearman correlation: SpearmanrResult(correlation=-0.3237645496283557, pvalue=3.8659929892968154e-74)
+n: 2999
+slope: -0.9089575489034811, intercept: 1.0151846197388708, r_value: -0.32307625599990136, p_value: 8.161497537015519e-74, std_err: 0.04863596079351382
+
+RMSE average: 0.574695650704917
+RMSE Duluth original vs. edit: 0.5245365334863499
+RMSE Duluth edit only: 0.5182463400320988
